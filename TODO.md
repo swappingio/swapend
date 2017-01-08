@@ -1,0 +1,2 @@
+- fix upload logic (test)
+- db shit
