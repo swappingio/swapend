@@ -1,0 +1,37 @@
+<html>
+<head>
+	<script src="https://unpkg.com/vue@2.1.8/dist/vue.js"></script>
+	<script type="text/javascript" src="/js/chiptune2.js/libopenmpt.js"></script>
+	<script type="text/javascript" src="/js/chiptune2.js/chiptune2.js"></script>
+</head>
+<body>
+	<img src="img/nuuls.jpeg">
+	<script>
+		var player;
+
+		function init() {
+			if (player == undefined) {
+				player = new ChiptuneJsPlayer(new ChiptuneJsConfig(-1));
+			}
+			else {
+				player.stop();
+				playPauseButton();
+			}
+		}
+
+		init();
+		player.load("rand/music.it", function(buffer) {
+			player.play(buffer);
+			setMetadata();
+			pausePauseButton();
+		});
+		
+		function setMetadata() {
+        var metadata = player.metadata();
+
+        console.log(metadata);
+
+    	}
+	</script>
+</body>
+</html>
