@@ -29,4 +29,6 @@ _testmain.go
 # External packages folder
 vendor/
 
+.vscode
+
 nuulsdoggolife
