@@ -1,7 +1,9 @@
 {
 	"Database":
 	{
-		"Username": "coral",
-		"Password": "lolwut"
+		"Hostname": "korverik.chdk08iw2orj.eu-central-1.rds.amazonaws.com",
+		"Username": "getrekt",
+		"Password": "89gu12jgi13j9",
+		"Dbname": "swapend"
 	}
 }

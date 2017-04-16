@@ -1,31 +1,28 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 
-	_ "github.com/lib/pq"
+	"github.com/jackc/pgx"
 )
 
 type DatabaseSettings struct {
 	Username string `default:"coral"`
 	Password string `default:"lolwut"`
-	Host     string `default:"localhost"`
+	Hostname string `default:"localhost"`
 	Dbname   string `default:"lolwut"`
 }
 
-var db *sql.DB
+var db *pgx.Conn
 
 func Init(c DatabaseSettings) {
-	dbInfo := fmt.Sprintf("user=%s password=%s host=%s dbname=%s sslmode=require", c.Username, c.Password, c.Host, c.Dbname)
+	dbInfo := fmt.Sprintf("user=%s password=%s host=%s dbname=%s sslmode=disable",
+		c.Username, c.Password, c.Hostname, c.Dbname)
 
 	var err error
-	db, err = sql.Open("postgres", dbInfo)
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = db.Ping()
+	dbConfig, err := pgx.ParseConnectionString(dbInfo)
+	db, err = pgx.Connect(dbConfig)
 	if err != nil {
 		log.Fatal(err)
 	}

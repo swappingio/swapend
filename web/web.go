@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/coral/swapend/db"
@@ -17,10 +18,13 @@ type Specification struct {
 func init() {
 
 	var s Specification
-	err := kkonfig.Process("web", "konfig.json", &s)
+	var test []string
+	test = append(test, "konfig.json")
+	err := kkonfig.Process("web", test, &s)
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(s)
 	db.Init(s.Database)
 }
 
