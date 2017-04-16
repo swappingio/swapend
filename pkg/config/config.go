@@ -8,10 +8,10 @@ import (
 
 type Specification struct {
 	Database struct {
-		Username string `default:"coral"`
-		Password string `default:"lolwut"`
-		Hostname string `default:"localhost"`
-		Dbname   string `default:"lolwut"`
+		Username string `json:"Username"`
+		Password string `json:"Password"`
+		Hostname string `json:"Hostname"`
+		Dbname   string `json:"Dbname"`
 	} `json:"Database"`
 	Mailgun struct {
 		APIKey       string `json:"APIKey"`
@@ -19,6 +19,10 @@ type Specification struct {
 		PublicAPIKey string `json:"PublicAPIKey"`
 		URL          string `json:"URL"`
 	} `json:"Mailgun"`
+	Authentication struct {
+		CookieSecret string `json:"CookieSecret"`
+		StorageName  string `json:"StorageName"`
+	} `json:"Authentication"`
 }
 
 var (

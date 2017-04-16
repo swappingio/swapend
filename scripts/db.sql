@@ -2,8 +2,10 @@ CREATE TABLE "users" (
 	id SERIAL PRIMARY KEY,
 	username varchar(50) NOT NULL,
 	password text NOT NULL,
-	hash bytea NOT NULL
--- FIX THIS LATER
+	email text NOT NULL,
+	salt char(40) NOT NULL,
+	reset char(100),
+	verified boolean NOT NULL
 );
 
 CREATE TABLE "songs" (
