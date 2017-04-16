@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/coral/swapend/db"
+	"github.com/coral/swapend/pkg/db"
 	"github.com/gin-gonic/gin"
 )
 

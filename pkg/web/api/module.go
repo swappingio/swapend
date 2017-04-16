@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/coral/swapend/web/api/v1"
+	"github.com/coral/swapend/pkg/web/api/v1"
 	"github.com/gin-gonic/gin"
 )
 

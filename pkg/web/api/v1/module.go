@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"github.com/coral/swapend/web/api/v1/sanity"
-	"github.com/coral/swapend/web/api/v1/song"
+	"github.com/coral/swapend/pkg/web/api/v1/sanity"
+	"github.com/coral/swapend/pkg/web/api/v1/song"
 	"github.com/gin-gonic/gin"
 )
 
