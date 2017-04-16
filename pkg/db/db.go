@@ -7,13 +7,6 @@ import (
 	"github.com/jackc/pgx"
 )
 
-type DatabaseSettings struct {
-	Username string `default:"coral"`
-	Password string `default:"lolwut"`
-	Hostname string `default:"localhost"`
-	Dbname   string `default:"lolwut"`
-}
-
 var db *pgx.Conn
 
 func Init(c DatabaseSettings) {
