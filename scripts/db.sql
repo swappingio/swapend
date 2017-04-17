@@ -5,6 +5,7 @@ CREATE TABLE "users" (
 	email text NOT NULL,
 	salt char(40) NOT NULL,
 	reset char(100),
+	verificationcode char(100),
 	verified boolean NOT NULL
 );
 

@@ -1,7 +1,7 @@
 package config
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/pajlada/kkonfig"
 )
@@ -35,8 +35,9 @@ func init() {
 	test = append(test, "/home/coral/.streamcred.json")
 	err := kkonfig.Process("web", test, &s)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
+	log.Println("Loaded Config.")
 }
 
 func GetConfig() Specification {
