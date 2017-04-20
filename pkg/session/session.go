@@ -7,9 +7,9 @@ import (
 )
 
 func Init(r *gin.Engine) {
-	c := config.GetConfig().Authentication
-	store, _ := sessions.NewRedisStore(10, "tcp", "localhost:6379", "",
-		[]byte(c.CookieSecret))
-	r.Use(sessions.Sessions(c.StorageName, store))
+	c := config.GetConfig()
+	store, _ := sessions.NewRedisStore(c.Redis.Timeout, "tcp", "localhost:6379", "",
+		[]byte(c.Sessions.CookieSecret))
+	r.Use(sessions.Sessions(c.Sessions.StorageName, store))
 
 }

@@ -1,0 +1,23 @@
+{
+	"Database": {
+		"Hostname": "",
+		"Username": "",
+		"Password": "",
+		"Dbname": ""
+	},
+	"Mailgun": {
+		"APIKey": "",
+		"Doman": "",
+		"PublicAPIKey": "",
+		"URL": ""
+	},
+	"Sessions": {
+		"CookieSecret": "",
+		"StorageName": ""
+	},
+	"Redis": {
+		"Hostname:": "localhost",
+		"Port": 6379,
+		"Timeout": 10
+	}
+}

@@ -8,9 +8,9 @@ import (
 
 type Specification struct {
 	Database struct {
+		Hostname string `json:"Hostname"`
 		Username string `json:"Username"`
 		Password string `json:"Password"`
-		Hostname string `json:"Hostname"`
 		Dbname   string `json:"Dbname"`
 	} `json:"Database"`
 	Mailgun struct {
@@ -19,10 +19,15 @@ type Specification struct {
 		PublicAPIKey string `json:"PublicAPIKey"`
 		URL          string `json:"URL"`
 	} `json:"Mailgun"`
-	Authentication struct {
+	Sessions struct {
 		CookieSecret string `json:"CookieSecret"`
 		StorageName  string `json:"StorageName"`
-	} `json:"Authentication"`
+	} `json:"Sessions"`
+	Redis struct {
+		Hostname string `json:"Hostname"`
+		Port     int    `json:"Port"`
+		Timeout  int    `json:"Timeout"`
+	} `json:"Redis"`
 }
 
 var (
