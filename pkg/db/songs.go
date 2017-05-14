@@ -18,10 +18,10 @@ type Song struct {
 
 func CreateVersion(SongUUID string) string {
 
-	newUUID := uuid.New().String()
+	newVersionUUID := uuid.New().String()
 
 	res, err := db.Exec("UPDATE songs SET versions = array_append(versions, $1) WHERE songid = $2",
-		newUUID, SongUUID)
+		newVersionUUID, SongUUID)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -32,21 +32,22 @@ func CreateVersion(SongUUID string) string {
 		return ""
 	}
 
-	_, err = db.Exec("INSERT INTO versions (created, fileid, uploader) VALUES (now(), $1, $2)", newUUID, 1)
+	_, err = db.Exec("INSERT INTO versions (created, fileid, uploader) VALUES (now(), $1, $2)",
+		newVersionUUID, 1)
 	if err != nil {
 		fmt.Println(err)
 	}
-	return newUUID
+	return newVersionUUID
 }
 
 func CreateSong(s Song) (string, error) {
-	var newUUID = uuid.New().String()
+	var newSongUUID = uuid.New().String()
 	_, err := db.Exec("INSERT INTO songs (songid, name, uploader, created) VALUES ($1, $2, $3, now())",
-		newUUID, "LUL", 1)
+		newSongUUID, "LUL", 1)
 	if err != nil {
 		fmt.Println(err)
 	}
-	return newUUID, nil
+	return newSongUUID, nil
 }
 
 func GetSong(SongUUID string) (Song, error) {

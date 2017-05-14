@@ -6,7 +6,8 @@ CREATE TABLE "users" (
 	salt char(40) NOT NULL,
 	reset char(100),
 	verificationcode char(100),
-	verified boolean NOT NULL
+	verified boolean NOT NULL,
+	access varchar(30)[]
 );
 
 CREATE TABLE "songs" (
@@ -14,7 +15,7 @@ CREATE TABLE "songs" (
 	songid UUID NOT NULL,
 	created timestamp(6)  NOT NULL,
 	name varchar(300) NOT NULL,
-	uploader INT references users(id),
+	creator INT references users(id),
 	versions varchar(36)[]
 );
 
@@ -24,3 +25,6 @@ CREATE TABLE "versions" (
 	fileid UUID NOT NULL,
 	uploader INT references users(id)
 );
+
+CREATE TABLE "lordcalvert" (
+)

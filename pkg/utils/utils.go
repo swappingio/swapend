@@ -1,5 +1,14 @@
 package utils
 
+import (
+	"math/rand"
+	"time"
+)
+
+var (
+	src = rand.NewSource(time.Now().UnixNano())
+)
+
 // Seed Initalizing for random function
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 const (

@@ -2,8 +2,6 @@ package db
 
 import (
 	"fmt"
-	"math/rand"
-	"time"
 
 	"github.com/coral/swapend/pkg/mail"
 	"github.com/coral/swapend/pkg/utils"
@@ -22,10 +20,6 @@ type User struct {
 	Verified     bool
 	Verification string
 }
-
-var (
-	src = rand.NewSource(time.Now().UnixNano())
-)
 
 func CreateUser(username string, password string, email string) error {
 	err := validation.ValidateEmail(email)

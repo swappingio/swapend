@@ -12,3 +12,15 @@ func ValidateEmail(string email) error {
 
 	return email
 }
+
+func ValidateUsername(string username) error {
+
+}
+
+func ValidatePassword(string password) error {
+
+}
+
+func Validate(string something) error {
+
+}

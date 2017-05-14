@@ -15,8 +15,14 @@ func Auth() gin.HandlerFunc {
 			c.JSON(401, gin.H{
 				"message": "NOT AUTHENTICATED",
 			})
-			c.Abort()
+			c.Done()
 		}
 
 	}
+}
+
+func IsAuthenticated() bool {
+	session := sessions.Default(c)
+	s := session.Get("authenticated")
+	return s
 }
