@@ -1,8 +1,8 @@
 package song
 
 import (
-	"github.com/coral/swapend/pkg/db"
 	"github.com/gin-gonic/gin"
+	"github.com/swappingio/swapend/pkg/db"
 )
 
 func getSong(c *gin.Context) {

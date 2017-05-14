@@ -3,9 +3,9 @@ package db
 import (
 	"fmt"
 
-	"github.com/coral/swapend/pkg/mail"
-	"github.com/coral/swapend/pkg/utils"
-	"github.com/coral/swapend/pkg/validation"
+	"github.com/swappingio/swapend/pkg/mail"
+	"github.com/swappingio/swapend/pkg/utils"
+	"github.com/swappingio/swapend/pkg/validation"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -22,13 +22,13 @@ type User struct {
 }
 
 func CreateUser(username string, password string, email string) error {
-	err := validation.ValidateEmail(email)
+	_, err := validation.ValidateEmail(email)
 	if err != nil {
 		return fmt.Errorf("Email is not valid.")
 	}
 
 	verificationcode := utils.GenerateRandomString(100)
-	salt := GenerateRandomString(40)
+	salt := utils.GenerateRandomString(40)
 	passHash, err := bcrypt.GenerateFromPassword([]byte(password+salt), bcrypt.DefaultCost)
 	if err != nil {
 	}
@@ -49,7 +49,7 @@ func VerifyUser(username string, password string) bool {
 	var passHash string
 	var salt string
 
-	err = db.QueryRow("SELECT password, salt FROM users WHERE username = $1",
+	err := db.QueryRow("SELECT password, salt FROM users WHERE username = $1",
 		username).Scan(&passHash, &salt)
 
 	if err != nil {
@@ -57,7 +57,7 @@ func VerifyUser(username string, password string) bool {
 		return false
 	}
 
-	err := bcrypt.CompareHashAndPassword([]byte(passHash), []byte(password+salt))
+	err = bcrypt.CompareHashAndPassword([]byte(passHash), []byte(password+salt))
 
 	if err != nil {
 		fmt.Println(err)

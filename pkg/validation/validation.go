@@ -1,26 +1,30 @@
 package validation
 
-import "fmt"
+import (
+	"fmt"
 
-func ValidateEmail(string email) error {
+	"github.com/goware/emailx"
+)
+
+func ValidateEmail(email string) (string, error) {
 	err := emailx.Validate(email)
 	if err != nil {
-		return fmt.Errorf("Email is not valid.")
+		return "", fmt.Errorf("Email is not valid.")
 	}
 
 	email = emailx.Normalize(email)
 
-	return email
+	return email, nil
 }
 
-func ValidateUsername(string username) error {
-
+func ValidateUsername(username string) error {
+	return nil
 }
 
-func ValidatePassword(string password) error {
-
+func ValidatePassword(password string) error {
+	return nil
 }
 
-func Validate(string something) error {
-
+func Validate(something string) error {
+	return nil
 }

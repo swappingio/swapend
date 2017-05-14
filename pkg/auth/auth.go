@@ -21,8 +21,10 @@ func Auth() gin.HandlerFunc {
 	}
 }
 
+/*
 func IsAuthenticated() bool {
 	session := sessions.Default(c)
 	s := session.Get("authenticated")
 	return s
 }
+*/

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/coral/swapend/pkg/auth"
-	"github.com/coral/swapend/pkg/config"
-	"github.com/coral/swapend/pkg/db"
-	"github.com/coral/swapend/pkg/session"
-	"github.com/coral/swapend/pkg/web/api"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/swappingio/swapend/pkg/auth"
+	"github.com/swappingio/swapend/pkg/config"
+	"github.com/swappingio/swapend/pkg/db"
+	"github.com/swappingio/swapend/pkg/session"
+	"github.com/swappingio/swapend/pkg/web/api"
 )
 
 var (

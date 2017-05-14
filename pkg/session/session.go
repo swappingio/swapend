@@ -1,9 +1,9 @@
 package session
 
 import (
-	"github.com/coral/swapend/pkg/config"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/swappingio/swapend/pkg/config"
 )
 
 func Init(r *gin.Engine) {

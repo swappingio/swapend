@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/coral/swapend/pkg/web/api/v1"
 	"github.com/gin-gonic/gin"
+	"github.com/swappingio/swapend/pkg/web/api/v1"
 )
 
 func New(parent *gin.RouterGroup) {

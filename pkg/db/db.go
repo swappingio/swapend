@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/coral/swapend/pkg/config"
 	"github.com/jackc/pgx"
+	"github.com/swappingio/swapend/pkg/config"
 )
 
 var db *pgx.Conn
