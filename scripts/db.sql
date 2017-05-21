@@ -1,12 +1,12 @@
 CREATE TABLE "users" (
 	id SERIAL PRIMARY KEY,
-	username varchar(50) NOT NULL,
+	username varchar(50) NOT NULL UNIQUE,
 	password text NOT NULL,
-	email text NOT NULL,
+	email text NOT NULL UNIQUE,
 	salt char(40) NOT NULL,
 	reset char(100),
-	verificationcode char(100),
-	verified boolean NOT NULL,
+	activationcode char(100),
+	activated boolean NOT NULL,
 	access varchar(30)[]
 );
 
@@ -25,6 +25,3 @@ CREATE TABLE "versions" (
 	fileid UUID NOT NULL,
 	uploader INT references users(id)
 );
-
-CREATE TABLE "lordcalvert" (
-)

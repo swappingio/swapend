@@ -15,7 +15,7 @@ func Auth() gin.HandlerFunc {
 			c.JSON(401, gin.H{
 				"message": "NOT AUTHENTICATED",
 			})
-			c.Done()
+			c.Abort()
 		}
 
 	}

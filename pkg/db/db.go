@@ -22,4 +22,6 @@ func Init() {
 		log.Fatal(err)
 		fmt.Println("TEST")
 	}
+
+	fmt.Println("Connected to Database")
 }

@@ -14,6 +14,7 @@ type Specification struct {
 		Dbname   string `json:"Dbname"`
 	} `json:"Database"`
 	Mailgun struct {
+		Enabled      bool   `json:"Enabled"`
 		APIKey       string `json:"APIKey"`
 		Domain       string `json:"Domain"`
 		PublicAPIKey string `json:"PublicAPIKey"`
@@ -22,7 +23,7 @@ type Specification struct {
 	Sessions struct {
 		CookieSecret string `json:"CookieSecret"`
 		StorageName  string `json:"StorageName"`
-	} `json:"Sessions"`
+	} `json:"Authentication"`
 	Redis struct {
 		Hostname string `json:"Hostname"`
 		Port     int    `json:"Port"`

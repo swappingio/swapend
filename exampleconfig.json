@@ -6,12 +6,13 @@
 		"Dbname": ""
 	},
 	"Mailgun": {
+		"Enabled": "true",
 		"APIKey": "",
 		"Doman": "",
 		"PublicAPIKey": "",
 		"URL": ""
 	},
-	"Sessions": {
+	"Authentication": {
 		"CookieSecret": "",
 		"StorageName": ""
 	},

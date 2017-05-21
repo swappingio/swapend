@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/swappingio/swapend/pkg/mail"
 	"github.com/swappingio/swapend/pkg/utils"
@@ -27,22 +28,52 @@ func CreateUser(username string, password string, email string) error {
 		return fmt.Errorf("Email is not valid.")
 	}
 
-	verificationcode := utils.GenerateRandomString(100)
+	activationcode := utils.GenerateRandomString(100)
 	salt := utils.GenerateRandomString(40)
 	passHash, err := bcrypt.GenerateFromPassword([]byte(password+salt), bcrypt.DefaultCost)
 	if err != nil {
 	}
 
-	_, err = db.Exec("INSERT INTO users (username, password, email, salt, verificationcode, verified) VALUES ($1, $2, $3, $4, $5, $6)",
-		username, passHash, email, salt, verificationcode, false)
+	username = strings.ToLower(username)
+	email = strings.ToLower(email)
+
+	var userCheck, emailCheck string
+	db.QueryRow("SELECT username, email FROM users WHERE username = $1 OR email = $2",
+		username, email).Scan(&userCheck, &emailCheck)
+
+	if username == userCheck {
+		return fmt.Errorf("Username already exists")
+	}
+
+	if email == emailCheck {
+		return fmt.Errorf("Email is already registered")
+	}
+
+	_, err = db.Exec("INSERT INTO users (username, password, email, salt, activationcode, activated) VALUES ($1, $2, $3, $4, $5, $6)",
+		username, passHash, email, salt, activationcode, false)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	mail.SendVerificationEmail(username, email, "AJIOGJIEOGJGO")
+	mail.SendActivationEmail(username, email, activationcode)
 
 	return nil
 
+}
+
+func ActivateUser(username string, activationcode string) error {
+	username = strings.ToLower(username)
+
+	res, err := db.Exec("UPDATE users SET activated = true, activationcode = '' WHERE username = $1 AND activationcode = $2 AND activated = false",
+		username, activationcode)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(res.RowsAffected())
+	if res.RowsAffected() != 1 {
+		return fmt.Errorf("Invalid activation code")
+	}
+	return nil
 }
 
 func VerifyUser(username string, password string) bool {
