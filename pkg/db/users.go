@@ -79,6 +79,7 @@ func ActivateUser(username string, activationcode string) error {
 func VerifyUser(username string, password string) bool {
 	var passHash string
 	var salt string
+	username = strings.ToLower(username)
 
 	err := db.QueryRow("SELECT password, salt FROM users WHERE username = $1",
 		username).Scan(&passHash, &salt)

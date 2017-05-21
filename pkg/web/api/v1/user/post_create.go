@@ -5,14 +5,14 @@ import (
 	"github.com/swappingio/swapend/pkg/db"
 )
 
-type Login struct {
+type NewUser struct {
 	Username string `form:"username" json:"username" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required"`
 	Email    string `form:"email" json:"email" binding:"required"`
 }
 
 func postCreate(c *gin.Context) {
-	var json Login
+	var json NewUser
 	if c.BindJSON(&json) == nil {
 		err := db.CreateUser(json.Username, json.Password, json.Email)
 
