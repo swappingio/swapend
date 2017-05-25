@@ -29,6 +29,11 @@ type Specification struct {
 		Port     int    `json:"Port"`
 		Timeout  int    `json:"Timeout"`
 	} `json:"Redis"`
+	Transcoder struct {
+		ConcurrentTranscodes int  `json:"ConcurrentTranscodes"`
+		Threads              int  `json:"Threads"`
+		Debug                bool `json:"Debug"`
+	} `json:"Transcoder"`
 }
 
 var (
@@ -43,6 +48,12 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	//Standard Values
+	s.Transcoder.ConcurrentTranscodes = 1
+	s.Transcoder.Threads = 1
+	s.Transcoder.Debug = true
+
 	log.Println("Loaded Config.")
 }
 

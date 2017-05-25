@@ -20,5 +20,10 @@
 		"Hostname:": "localhost",
 		"Port": 6379,
 		"Timeout": 10
+	},
+	"Transcoder": {
+		"ConcurrentTranscodes": 1,
+		"Threads": 1,
+		"Debug": false
 	}
 }
