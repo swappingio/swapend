@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/swappingio/swapend/pkg/auth"
 	"github.com/swappingio/swapend/pkg/mail"
 	"github.com/swappingio/swapend/pkg/utils"
 	"github.com/swappingio/swapend/pkg/validation"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -29,10 +28,6 @@ func CreateUser(username string, password string, email string) error {
 	}
 
 	activationcode := utils.GenerateRandomString(100)
-	salt := utils.GenerateRandomString(40)
-	passHash, err := bcrypt.GenerateFromPassword([]byte(password+salt), bcrypt.DefaultCost)
-	if err != nil {
-	}
 
 	username = strings.ToLower(username)
 	email = strings.ToLower(email)
@@ -49,16 +44,29 @@ func CreateUser(username string, password string, email string) error {
 		return fmt.Errorf("Email is already registered")
 	}
 
-	_, err = db.Exec("INSERT INTO users (username, password, email, salt, activationcode, activated) VALUES ($1, $2, $3, $4, $5, $6)",
-		username, passHash, email, salt, activationcode, false)
+	var newID int64
+
+	err = db.QueryRow("INSERT INTO users (username, password, email, salt, activationcode, activated) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
+		username, "placeholder", email, "saltholder", activationcode, false).Scan(&newID)
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	SetPassword(newID, password)
 
 	mail.SendActivationEmail(username, email, activationcode)
 
 	return nil
 
+}
+
+func SetPassword(userid int64, password string) {
+	passHash, salt := auth.CreatePassword(password)
+	_, err := db.Exec("UPDATE users SET password = $1, salt = $2 WHERE id = $3", passHash, salt, userid)
+	if err != nil {
+		fmt.Println("error on setting password")
+		fmt.Println(err)
+	}
 }
 
 func ActivateUser(username string, activationcode string) error {
@@ -76,24 +84,25 @@ func ActivateUser(username string, activationcode string) error {
 	return nil
 }
 
-func VerifyUser(username string, password string) bool {
+func VerifyUser(username string, password string) (int64, bool) {
 	var passHash string
 	var salt string
+	var id int64
 	username = strings.ToLower(username)
 
-	err := db.QueryRow("SELECT password, salt FROM users WHERE username = $1",
-		username).Scan(&passHash, &salt)
+	err := db.QueryRow("SELECT password, salt, id FROM users WHERE username = $1",
+		username).Scan(&passHash, &salt, &id)
 
 	if err != nil {
 		fmt.Println("Could not auth user.")
-		return false
+		return 0, false
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(passHash), []byte(password+salt))
+	matches := auth.VerifyPassword(password, passHash, salt)
 
-	if err != nil {
-		fmt.Println(err)
-		return false
+	if matches {
+		return id, true
+	} else {
+		return 0, false
 	}
-	return true
 }

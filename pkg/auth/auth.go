@@ -24,10 +24,10 @@ func Auth() gin.HandlerFunc {
 	}
 }
 
-func SetAuth(status int, c *gin.Context) {
+func SetAuth(id int64, c *gin.Context) {
 	sessions := sessions.Default(c)
 	sessions.Set("authenticated", true)
-	sessions.Set("status", status)
+	sessions.Set("userid", id)
 	sessions.Save()
 }
 

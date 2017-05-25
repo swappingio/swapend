@@ -15,6 +15,8 @@ func New(parent *gin.RouterGroup) {
 	authorized := parent.Group("/")
 	authorized.Use(auth.Auth())
 	{
+
 		authorized.GET("/auth", getAuth)
+		authorized.POST("/update", postUpdate)
 	}
 }

@@ -14,9 +14,9 @@ type Login struct {
 func postLogin(c *gin.Context) {
 	var json Login
 	if c.BindJSON(&json) == nil {
-		verified := db.VerifyUser(json.Username, json.Password)
+		id, verified := db.VerifyUser(json.Username, json.Password)
 		if verified {
-			auth.SetAuth(1, c)
+			auth.SetAuth(id, c)
 		}
 	}
 }
