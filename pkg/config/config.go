@@ -1,9 +1,9 @@
 package config
 
 import (
-	"log"
-
 	"github.com/pajlada/kkonfig"
+	"log"
+	"os/user"
 )
 
 type Specification struct {
@@ -42,8 +42,13 @@ var (
 
 func init() {
 
+	usr, hpath := user.Current()
+	if hpath != nil {
+		log.Fatal(hpath)
+	}
+
 	var test []string
-	test = append(test, "/home/coral/.streamcred.json")
+	test = append(test, usr.HomeDir+"/.streamcred.json")
 	err := kkonfig.Process("web", test, &s)
 	if err != nil {
 		log.Fatal(err)
