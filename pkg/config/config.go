@@ -1,10 +1,12 @@
 package config
 
 import (
-	"github.com/pajlada/kkonfig"
 	"log"
 	"os"
+	"os/user"
 	"runtime"
+
+	"github.com/pajlada/kkonfig"
 )
 
 type Specification struct {
@@ -45,11 +47,11 @@ func init() {
 
 	var pathSeperator string
 
-	// will clean this up later, but for now it's okay 
-	if runtime.GOOS == "windows"{
+	// will clean this up later, but for now it's okay
+	if runtime.GOOS == "windows" {
 		pathSeperator = "\\"
 
-	} else if runtime.GOOS == "darwin"{
+	} else if runtime.GOOS == "darwin" {
 		pathSeperator = "/"
 
 	} else if runtime.GOOS == "linux" {
@@ -75,16 +77,15 @@ func init() {
 		log.Fatal(err)
 	}
 
-	PATH := usr.HomeDir+pathSeperator+configFile
+	PATH := usr.HomeDir + pathSeperator + configFile
 
 	_, fileErr := os.Stat(PATH)
-	if os.IsNotExist(fileErr){
+	if os.IsNotExist(fileErr) {
 		log.Printf("The config '%s' doesn't exist.\n", configFile)
 		os.Exit(127) // bash exit code for problems with path
 	} else {
 		log.Printf("\nFound Config. \n%s", PATH)
 	}
-
 
 	//Standard Values
 	s.Transcoder.ConcurrentTranscodes = 1
