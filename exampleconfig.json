@@ -1,0 +1,29 @@
+{
+	"Database": {
+		"Hostname": "",
+		"Username": "",
+		"Password": "",
+		"Dbname": ""
+	},
+	"Mailgun": {
+		"Enabled": "true",
+		"APIKey": "",
+		"Doman": "",
+		"PublicAPIKey": "",
+		"URL": ""
+	},
+	"Authentication": {
+		"CookieSecret": "",
+		"StorageName": ""
+	},
+	"Redis": {
+		"Hostname:": "localhost",
+		"Port": 6379,
+		"Timeout": 10
+	},
+	"Transcoder": {
+		"ConcurrentTranscodes": 1,
+		"Threads": 1,
+		"Debug": false
+	}
+}

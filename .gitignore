@@ -40,3 +40,8 @@ tmp
 store
 debug
 data
+SCRIBBLE.md
+
+.DS_Store
+*.rdb
+*.ck

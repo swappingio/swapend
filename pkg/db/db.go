@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/coral/swapend/pkg/config"
 	"github.com/jackc/pgx"
+	"github.com/swappingio/swapend/pkg/config"
 )
 
 var db *pgx.Conn
@@ -22,4 +22,6 @@ func Init() {
 		log.Fatal(err)
 		fmt.Println("TEST")
 	}
+
+	fmt.Println("Connected to Database")
 }

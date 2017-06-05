@@ -2,20 +2,12 @@ package db
 
 import (
 	"fmt"
-	"math/rand"
-	"time"
+	"strings"
 
-	"github.com/coral/swapend/pkg/mail"
-	"github.com/goware/emailx"
-
-	"golang.org/x/crypto/bcrypt"
-)
-
-const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-const (
-	letterIdxBits = 6                    // 6 bits to represent a letter index
-	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
-	letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
+	"github.com/swappingio/swapend/pkg/auth"
+	"github.com/swappingio/swapend/pkg/mail"
+	"github.com/swappingio/swapend/pkg/utils"
+	"github.com/swappingio/swapend/pkg/validation"
 )
 
 type User struct {
@@ -29,71 +21,88 @@ type User struct {
 	Verification string
 }
 
-var (
-	src = rand.NewSource(time.Now().UnixNano())
-)
-
 func CreateUser(username string, password string, email string) error {
-	err := emailx.Validate(email)
+	_, err := validation.ValidateEmail(email)
 	if err != nil {
 		return fmt.Errorf("Email is not valid.")
 	}
 
-	email = emailx.Normalize(email)
+	activationcode := utils.GenerateRandomString(100)
 
-	verificationcode := randStringBytesMaskImprSrc(100)
-	salt := randStringBytesMaskImprSrc(40)
-	passHash, err := bcrypt.GenerateFromPassword([]byte(password+salt), bcrypt.DefaultCost)
-	if err != nil {
+	username = strings.ToLower(username)
+	email = strings.ToLower(email)
+
+	var userCheck, emailCheck string
+	db.QueryRow("SELECT username, email FROM users WHERE username = $1 OR email = $2",
+		username, email).Scan(&userCheck, &emailCheck)
+
+	if username == userCheck {
+		return fmt.Errorf("Username already exists")
 	}
 
-	_, err = db.Exec("INSERT INTO users (username, password, email, salt, verificationcode, verified) VALUES ($1, $2, $3, $4, $5, $6)",
-		username, passHash, email, salt, verificationcode, false)
+	if email == emailCheck {
+		return fmt.Errorf("Email is already registered")
+	}
+
+	var newID int64
+
+	err = db.QueryRow("INSERT INTO users (username, password, email, salt, activationcode, activated) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
+		username, "placeholder", email, "saltholder", activationcode, false).Scan(&newID)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	mail.SendVerificationEmail(username, email, "AJIOGJIEOGJGO")
+	SetPassword(newID, password)
+
+	mail.SendActivationEmail(username, email, activationcode)
 
 	return nil
 
 }
 
-func VerifyUser(username string, password string) bool {
+func SetPassword(userid int64, password string) {
+	passHash, salt := auth.CreatePassword(password)
+	_, err := db.Exec("UPDATE users SET password = $1, salt = $2 WHERE id = $3", passHash, salt, userid)
+	if err != nil {
+		fmt.Println("error on setting password")
+		fmt.Println(err)
+	}
+}
+
+func ActivateUser(username string, activationcode string) error {
+	username = strings.ToLower(username)
+
+	res, err := db.Exec("UPDATE users SET activated = true, activationcode = '' WHERE username = $1 AND activationcode = $2 AND activated = false",
+		username, activationcode)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(res.RowsAffected())
+	if res.RowsAffected() != 1 {
+		return fmt.Errorf("Invalid activation code")
+	}
+	return nil
+}
+
+func VerifyUser(username string, password string) (int64, bool) {
 	var passHash string
 	var salt string
+	var id int64
+	username = strings.ToLower(username)
 
-	err = db.QueryRow("SELECT password, salt FROM users WHERE username = $1",
-		username).Scan(&passHash, &salt)
+	err := db.QueryRow("SELECT password, salt, id FROM users WHERE username = $1",
+		username).Scan(&passHash, &salt, &id)
 
 	if err != nil {
 		fmt.Println("Could not auth user.")
-		return false
+		return 0, false
 	}
 
-	err := bcrypt.CompareHashAndPassword([]byte(passHash), []byte(password+salt))
+	matches := auth.VerifyPassword(password, passHash, salt)
 
-	if err != nil {
-		fmt.Println(err)
-		return false
+	if matches {
+		return id, true
+	} else {
+		return 0, false
 	}
-	return true
-}
-
-func randStringBytesMaskImprSrc(n int) string {
-	b := make([]byte, n)
-	// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!
-	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
-		if remain == 0 {
-			cache, remain = src.Int63(), letterIdxMax
-		}
-		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
-			b[i] = letterBytes[idx]
-			i--
-		}
-		cache >>= letterIdxBits
-		remain--
-	}
-
-	return string(b)
 }

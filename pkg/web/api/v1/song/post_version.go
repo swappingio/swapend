@@ -6,8 +6,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/coral/swapend/pkg/db"
 	"github.com/gin-gonic/gin"
+	"github.com/swappingio/swapend/pkg/db"
 )
 
 func postVersion(c *gin.Context) {

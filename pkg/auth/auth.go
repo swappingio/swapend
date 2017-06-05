@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"fmt"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
@@ -9,7 +11,8 @@ func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		s := session.Get("authenticated")
-		if s != nil {
+		if s != nil && s == true {
+			fmt.Println(s)
 			c.Next()
 		} else {
 			c.JSON(401, gin.H{
@@ -20,3 +23,24 @@ func Auth() gin.HandlerFunc {
 
 	}
 }
+
+func SetAuth(id int64, c *gin.Context) {
+	sessions := sessions.Default(c)
+	sessions.Set("authenticated", true)
+	sessions.Set("userid", id)
+	sessions.Save()
+}
+
+func KillAuth(c *gin.Context) {
+	sessions := sessions.Default(c)
+	sessions.Clear()
+	sessions.Save()
+}
+
+/*
+func IsAuthenticated() bool {
+	session := sessions.Default(c)
+	s := session.Get("authenticated")
+	return s
+}
+*/
