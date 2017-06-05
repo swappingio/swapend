@@ -75,6 +75,7 @@ func init() {
 		log.Fatal(err)
 	}
 
+	PATH := usr.HomeDir+pathSeperator+configFile
 
 	_, fileErr := os.Stat(PATH)
 	if os.IsNotExist(fileErr){
