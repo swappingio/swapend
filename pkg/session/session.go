@@ -20,5 +20,8 @@ func Init(r *gin.Engine) {
 	)
 	r.Use(sessions.Sessions(c.Sessions.StorageName, store))
 
+	// #TODO
+	// look in the process list for redis
+	// bash_example; ps aux | cut -d' ' -f1 | grep redis
 	fmt.Println("Connected to Redis")
 }
